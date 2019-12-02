@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"math/rand"
 	"net/http"
+	"time"
 
 	"github.com/go-kit/kit/endpoint"
 )
@@ -12,6 +14,7 @@ func makeUppercaseEndpoint(svc StringService) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (interface{}, error) {
 		req := request.(uppercaseRequest)
 		v, err := svc.Uppercase(req.S)
+		time.Sleep(time.Duration(rand.Intn(30)) * time.Second)
 		if err != nil {
 			return uppercaseResponse{v, err.Error()}, nil
 		}
@@ -23,6 +26,7 @@ func makeCountEndpoint(svc StringService) endpoint.Endpoint {
 	return func(_ context.Context, request interface{}) (interface{}, error) {
 		req := request.(countRequest)
 		v := svc.Count(req.S)
+		time.Sleep(time.Duration(rand.Intn(30)) * time.Second)
 		return countResponse{v}, nil
 	}
 }
